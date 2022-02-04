@@ -1,4 +1,3 @@
-MESSAGE = """
 Olá!
 
 Parabéns pela inscrição no Eventex.
@@ -14,4 +13,3 @@ Telefone: {{ phone }}
 Atenciosamente,
 --
 Fulano
-"""
