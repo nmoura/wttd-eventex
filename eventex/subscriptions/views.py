@@ -1,3 +1,4 @@
+from decouple import config
 from django.contrib import messages
 from django.core import mail
 from django.http import HttpResponseRedirect, HttpResponse
@@ -16,8 +17,8 @@ def subscribe(request):
                                     form.cleaned_data)
             mail.send_mail('Confirmação de inscrição',
                            body,
-                           'contato@eventex.com.br',
-                           ['contato@eventex.com.br', form.cleaned_data['email']])
+                           config('EMAIL_ADDRESS'),
+                           [config('EMAIL_ADDRESS'), form.cleaned_data['email']])
             messages.success(request, 'Inscrição realizada com sucesso!')
             return HttpResponseRedirect('/inscricao/')
         else:
