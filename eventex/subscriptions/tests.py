@@ -1,3 +1,4 @@
+from decouple import config
 from django.core import mail
 from django.test import TestCase
 from eventex.subscriptions.forms import SubscriptionForm
@@ -40,7 +41,7 @@ class SubscribeTest(TestCase):
 class SubscribePostTest(TestCase):
     def setUp(self):
         data = dict(name='Nilton Moura', cpf='12345678901',
-                    email='nonecziste@null.com', phone='21-12345-6789')
+                    email=config('EMAIL_ADDRESS'), phone='21-12345-6789')
         self.resp = self.client.post('/inscricao/', data)
 
     def test_post(self):
@@ -59,13 +60,13 @@ class SubscribePostTest(TestCase):
 
     def test_subscription_email_from(self):
         email = mail.outbox[0]
-        expect = 'contato@eventex.com.br'
+        expect = config('EMAIL_ADDRESS')
 
         self.assertEqual(expect, email.from_email)
 
     def test_subscription_email_to(self):
         email = mail.outbox[0]
-        expect = ['contato@eventex.com.br', 'nonecziste@null.com']
+        expect = [config('EMAIL_ADDRESS'), config('EMAIL_ADDRESS')]
 
         self.assertEqual(expect, email.to)
 
@@ -74,7 +75,7 @@ class SubscribePostTest(TestCase):
 
         self.assertIn('Nilton Moura', email.body)
         self.assertIn('12345678901', email.body)
-        self.assertIn('nonecziste@null.com', email.body)
+        self.assertIn(config('EMAIL_ADDRESS'), email.body)
         self.assertIn('21-12345-6789', email.body)
 
 class SubscribeInvalidPost(TestCase):
