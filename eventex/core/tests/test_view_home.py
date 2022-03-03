@@ -6,19 +6,19 @@ class HomeTest(TestCase):
     fixtures = ['keynotes.json']
 
     def setUp(self):
-        self.response = self.client.get(r('home'))
+        self.resp = self.client.get(r('home'))
 
     def test_get(self):
         """GET / must return status code 200"""
-        self.assertEqual(200, self.response.status_code)
+        self.assertEqual(200, self.resp.status_code)
 
     def test_template(self):
         """Must use index.html"""
-        self.assertTemplateUsed(self.response.status_code)
+        self.assertTemplateUsed(self.resp.status_code)
 
     def test_subscription_link(self):
         expected = 'href="{}"'.format(r('subscriptions:new'))
-        self.assertContains(self.response, expected)
+        self.assertContains(self.resp, expected)
 
     def test_speakers(self):
         """Must show keynote speakers"""
@@ -32,8 +32,12 @@ class HomeTest(TestCase):
         ]
         for expected in contents:
             with self.subTest():
-                self.assertContains(self.response, expected)
+                self.assertContains(self.resp, expected)
 
     def test_speakers_link(self):
         expected = 'href="{}#speakers"'.format(r('home'))
-        self.assertContains(self.response, expected)
+        self.assertContains(self.resp, expected)
+
+    def test_talks_link(self):
+        expected = 'href="{}"'.format(r('talk_list'))
+        self.assertContains(self.resp, expected)
